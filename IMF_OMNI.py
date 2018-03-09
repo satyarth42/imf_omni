@@ -1,7 +1,7 @@
 import pandas as pd
-import numpy as np
+
 from datetime import datetime,timedelta
-df = pd.read_csv('omni2_2017.dat', sep='\s+', header=None, skiprows=0)
+df = pd.read_csv('https://cdaweb.gsfc.nasa.gov/pub/data/omni/low_res_omni/omni2_2017.dat', sep='\s+', header=None, skiprows=0)
 df.columns = [ 'year',  'day',  'hour',  'Bartels_rotation_no',  'IMF_Spacecraft_ID',  'SW_plasma_Spacecraft_ID',
               '#pts_IMF_avg',  '#pts_in_plasma_avg','B_avg',  'B', 'Lat_angle', 'long_angle', 'Bx', 
               'By_GSE', 'Bz_GSE','By_GSM', 'Bz_GSM','sigma|B|','sigma_B', 'sigma|Bx|', 'sigma|By|', 'sigma|Bz|',
@@ -27,12 +27,10 @@ step_value={'day':1,'hour':1, 'Bartels_rotation_no':1,'B_avg':0.1,'B':0.1,'Bx':0
             }
 
 from bokeh.plotting import figure, curdoc
-from bokeh.io import output_notebook, show
 from bokeh.models import HoverTool,Slider,Select, ColumnDataSource
 from bokeh.layouts import column , row
-from bokeh.models.widgets.sliders import DateRangeSlider, RangeSlider
+from bokeh.models.widgets.sliders import RangeSlider
 from datetime import datetime
-from bokeh.palettes import Set2
 
 source = ColumnDataSource(data={
     'x':df[(df['day']<unknown['day']) & (df['DST_index']<unknown['DST_index'])]['day'],
@@ -48,7 +46,7 @@ def year_update(attr,old,new):
     curdoc().title = "Loading data..."
     plot.title.text = "Loading data..."
     year = year_select.value
-    file_name = 'omni2_'+year+'.dat'
+    file_name = 'https://cdaweb.gsfc.nasa.gov/pub/data/omni/low_res_omni/omni2_'+year+'.dat'
     df = pd.read_csv(file_name, sep='\s+', header=None, skiprows=0)
     df.columns = [ 'year',  'day',  'hour',  'Bartels_rotation_no',  'IMF_Spacecraft_ID',  'SW_plasma_Spacecraft_ID',
               '#pts_IMF_avg',  '#pts_in_plasma_avg','B_avg',  'B', 'Lat_angle', 'long_angle', 'Bx', 
@@ -297,7 +295,6 @@ x_axis.on_change('value',update_plot)
 y_axis.on_change('value',update_plot)
 for x in sliders:
 	x.on_change('value',update_plot)
-
 
 curdoc().add_root(layout)
 curdoc().title = "IMF data 2017"
